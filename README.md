@@ -10,6 +10,12 @@
 # See .env.example for required environment variables
 ```
 
+Generate token manually (can also be done through API)
+
+```
+yarn authorize
+```
+
 API Usage
 
 ```bash

@@ -4,7 +4,6 @@ import { CalendarListEntry, CalendarEvent } from "../../generatedTypes";
 import { ApolloError } from "apollo-server-core";
 import { OAuth2Client } from "googleapis-common";
 import * as fs from "fs-extra";
-import * as readline from "readline";
 import logger from "../../util/logger";
 
 const GOOGLE_OAUTH2_CLIENT_ID = envVars().GOOGLE_OAUTH2_CLIENT_ID;
@@ -25,43 +24,14 @@ async function fetchAuthClient(): Promise<OAuth2Client> {
   return authClient;
 }
 
-async function promptCode(): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    rl.question("Enter the code from that page here: ", code => {
-      rl.close();
-      if (!code) reject(new Error("code required"));
-      resolve(code);
-    });
-  });
-}
-
 async function fetchAccessTokens() {
   if (await fs.pathExists(TOKEN_PATH)) {
     const tokens = await fs.readJson(TOKEN_PATH);
     logger.debug(`Found cached tokens ${TOKEN_PATH}`);
     if (tokens) return tokens;
   }
-
-  try {
-    const authUrl = authClient.generateAuthUrl({
-      access_type: "offline",
-      scope: SCOPES
-    });
-    logger.debug("Authorize this app by visiting this url:", authUrl);
-    const code = await promptCode();
-    const { tokens } = await authClient.getToken(code);
-
-    fs.writeJson(TOKEN_PATH, tokens);
-    logger.debug("Token stored to", TOKEN_PATH);
-    return tokens;
-  } catch (err) {
-    logger.error("Unable to fetch access token", err);
-  }
+  logger.error("No tokens found - please authorize");
+  return "";
 }
 
 export const setOAuthCode = async (code: string) => {
@@ -72,7 +42,7 @@ export const setOAuthCode = async (code: string) => {
 };
 
 export const authUrl = async (): Promise<String> => {
-  const authUrl = authClient.generateAuthUrl({
+  const authUrl = await authClient.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES
   });

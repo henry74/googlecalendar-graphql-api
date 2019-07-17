@@ -11,10 +11,10 @@
     "build": "rm -rf dist && tsc",
     "build:watch": "rm -rf dist && tsc -w",
     "start": "yarn build && node dist/index.js",
-    "start:dev": "npm-run-all --parallel build:watch inspect",
+    "start:dev": "nodemon --exec ts-node src/index.ts",
     "inspect": "nodemon --inspect=0.0.0.0:9229 dist/index.js",
     "generate": "./tools/generate-gql.sh",
-    "authorize": "node ./tools/authorize.js"
+    "authorize": "ts-node ./tools/authorize.ts"
   },
   "dependencies": {
     "apollo-server-express": "^2.5.0",
