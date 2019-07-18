@@ -20,6 +20,8 @@ export interface Query {
   calendars: (Maybe<CalendarListEntry>)[];
   /** Fetch events for a calendar */
   events?: Maybe<(Maybe<CalendarEvent>)[]>;
+  /** Fetch events across multiple calendars */
+  aggregateEvents?: Maybe<(Maybe<CalendarEvent>)[]>;
   /** Generate auth URL for authentication */
   authUrl: string;
 }
@@ -75,7 +77,12 @@ export interface Subscription {
 // ====================================================
 
 export interface EventsQueryArgs {
-  calendarId?: Maybe<string>;
+  calendarId: string;
+
+  maxResults?: Maybe<number>;
+}
+export interface AggregateEventsQueryArgs {
+  calendarList: (Maybe<string>)[];
 
   maxResults?: Maybe<number>;
 }

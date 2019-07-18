@@ -5,7 +5,9 @@ export const typeDef = gql`
     "List available calendars"
     calendars: [CalendarListEntry]!
     "Fetch events for a calendar"
-    events(calendarId: String, maxResults: Int): [CalendarEvent]
+    events(calendarId: String!, maxResults: Int): [CalendarEvent]
+    "Fetch events across multiple calendars"
+    aggregateEvents(calendarList: [String]!, maxResults: Int): [CalendarEvent]
     "Generate auth URL for authentication"
     authUrl: String!
   }
@@ -18,6 +20,13 @@ export const resolvers = {
     },
     events: (root, { calendarId, maxResults }, { services: { calendars } }) => {
       return calendars.events(calendarId, maxResults);
+    },
+    aggregateEvents: (
+      root,
+      { calendarList, maxResults },
+      { services: { calendars } }
+    ) => {
+      return calendars.aggregateEvents(calendarList, maxResults);
     },
     authUrl: (root, {}, { services: { calendars } }) => {
       return calendars.authUrl();

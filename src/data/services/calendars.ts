@@ -27,7 +27,7 @@ async function fetchAuthClient(): Promise<OAuth2Client> {
 async function fetchAccessTokens() {
   if (await fs.pathExists(TOKEN_PATH)) {
     const tokens = await fs.readJson(TOKEN_PATH);
-    logger.debug(`Found cached tokens ${TOKEN_PATH}`);
+    // logger.debug(`Found cached tokens ${TOKEN_PATH}`);
     if (tokens) return tokens;
   }
   logger.error("No tokens found - please authorize");
@@ -69,6 +69,24 @@ export const list = async (): Promise<Array<CalendarListEntry>> => {
   }
 };
 
+export const aggregateEvents = async (
+  calendarList: Array<string>,
+  maxResults: number = 10
+): Promise<Array<CalendarEvent>> => {
+  const results = await Promise.all(
+    calendarList.map(calendarId => {
+      return events(calendarId, maxResults);
+    })
+  );
+
+  return results
+    .flat()
+    .sort((a, b) => {
+      return Date.parse(a.start.dateTime) - Date.parse(b.start.dateTime);
+    })
+    .slice(0, maxResults);
+};
+
 export const events = async (
   calendarId: string,
   maxResults: number = 10
@@ -84,7 +102,6 @@ export const events = async (
       orderBy: "startTime"
     });
     const response = data.items.map(event => {
-      logger.debug(event);
       const {
         kind,
         etag,
