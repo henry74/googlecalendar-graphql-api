@@ -1,11 +1,13 @@
-FROM node:10.16.0-alpine AS build
+FROM balenalib/armv7hf-alpine-node AS build
 COPY . /src
 WORKDIR /src
+RUN [ "cross-build-start" ]
 RUN yarn install
 RUN yarn run build
 RUN yarn install --production
+RUN [ "cross-build-end" ]
 
-FROM node:10.16.0-alpine
+FROM balenalib/armv7hf-alpine-node
 EXPOSE 4000
 
 WORKDIR /app
