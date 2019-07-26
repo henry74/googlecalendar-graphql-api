@@ -67,3 +67,4 @@ dist/
 client_secret.json
 token.json
 credentials.json
+docker_run.sh

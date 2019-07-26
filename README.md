@@ -16,10 +16,25 @@ Generate token manually (can also be done through API)
 yarn authorize
 ```
 
-API Usage
+### API Usage
+
+Terminal/CLI
 
 ```bash
 yarn start # start graphql playground on http://localhost:4000
+```
+
+Dockerfile (after building)
+
+```
+docker run -d \
+   -p 4004:4000 \
+   -e GOOGLE_OAUTH2_CLIENT_ID="123412341234-randombunchofcharacters.apps.googleusercontent.com" \
+   -e GOOGLE_OAUTH2_CLIENT_SECRET="1234asdf1234" \
+   -e GOOGLE_OAUTH2_REDIRECT_URL="urn:ietf:wg:oauth:2.0:oob" \
+   -e TOKEN_PATH=./token.json \
+   your/image:latest
+
 ```
 
 Click schema tab within graphQL playground for details
