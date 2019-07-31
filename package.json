@@ -39,5 +39,10 @@
     "npm-run-all": "^4.1.5",
     "ts-node": "^8.3.0",
     "typescript": "^3.4.5"
+  },
+  "resolutions": {
+    "**/**/lodash": "^4.17.12",
+    "**/**/set-value": "^3.0.1",
+    "**/**/mixin-deep": "^2.0.1"
   }
 }
