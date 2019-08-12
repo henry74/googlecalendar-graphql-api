@@ -1,3 +1,5 @@
+# Note: This is no longer being updated.  Please see https://github.com/henry74/gsuite-graphql-server for the latest
+
 # Simple GraphQL API for Google Calendar
 
 ## Setup
